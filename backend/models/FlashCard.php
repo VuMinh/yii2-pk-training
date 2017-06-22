@@ -11,37 +11,7 @@ use Yii;
  * @property string $title
  * @property string $content
  */
-class FlashCard extends \yii\db\ActiveRecord
+class FlashCard  extends base\FlashCard
 {
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
-        return 'flash_card';
-    }
 
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            [['title'], 'required'],
-            [['content'], 'string'],
-            [['title'], 'string', 'max' => 255],
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'title' => 'Title',
-            'content' => 'Content',
-        ];
-    }
 }

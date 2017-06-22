@@ -53,3 +53,80 @@ frontend
 vendor/                  contains dependent 3rd-party packages
 environments/            contains environment-based overrides
 ```
+
+----------------------
+Migrate database
+----------------------
+Run câu lệnh: 'yii migrate/create create_post_table' để tạo migrate
+Sau đó run câu lệnh : 'yii migrate' để tạo table trong database
+Tham khảo thêm: http://www.yiiframework.com/doc-2.0/guide-db-migrations.html
+-----------------------
+Data Access Objects
+--------------------------
+```
+ public function actionViewAllCard(){
+        $connection = Yii::$app->getDb();
+        $card = $connection->createCommand('SELECT * FROM flash_card')->queryAll();
+        var_dump($card);
+    }
+```
+---------------
+Tham khảo thêm tại: http://www.yiiframework.com/doc-2.0/guide-db-dao.html
+
+----------------------
+Use ActiveRecord and ActiveQuery for custom sql query
+------------------------------------------------------
+The `where()` method specifies the WHERE fragment of a SQL query. You can use one of the three formats to specify a WHERE condition:
+* string format, e.g., `status=1`
+* hash format, e.g. `['status' => 1, 'type' => 2]`
+* operator format, e.g. `['like', 'name', 'test']`
+Xem thêm tại: http://www.yiiframework.com/doc-2.0/guide-db-query-builder.html#where
+
+-----------------------------
+Query Builder
+------------------
+```
+$query = new Query();
+        $query->select(['id', 'title'])
+            ->from('flash_card')
+            ->where(['id' => '2'])
+            ->all();
+```
+Dạng trả về như sau:
+```
+SELECT `id`, `title` 
+FROM `flash_card`
+WHERE `id` = :2
+```
+------------------------
+Assets trong yii2
+----------------------
+Assets được định nghĩa là tài sản nghĩa là những thứ có thể tham chiếu đến trong 1 trang web như css,js,ảnh ,video nói chung là những thứ dùng cho trang web ngoài code thì đặt trong assets
+
+namespace backend\assets;
+
+use yii\web\AssetBundle;
+```
+/**
+ * Main backend application asset bundle.
+ */
+class AppAsset extends AssetBundle
+{
+    public $basePath = '@webroot';
+    public $baseUrl = '@web';
+    public $css = [
+        'css/site.css',
+    ];
+    public $js = [
+    ];
+    public $depends = [
+        'yii\web\YiiAsset',
+        'yii\bootstrap\BootstrapAsset',
+    ];
+}
+```
+* Cách sử dụng:
+```
+use app\assets\AppAsset;
+AppAsset::register($this);  // $this represents the view object
+```

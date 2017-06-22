@@ -43,6 +43,7 @@ return [
             'showScriptName' => false,
             'rules' => [
                 '<controller>/<action:(view)>/<id:\d+>' => '<controller>/<action>',
+                '<controller>/<action:(update)>/<id:\d+>' => '<controller>/<action>',
                 '<controller>s' => '<controller>/index',
             ],
         ],

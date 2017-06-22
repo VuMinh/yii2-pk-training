@@ -5,120 +5,77 @@ namespace backend\controllers;
 use Yii;
 use backend\models\FlashCard;
 use backend\models\FlashCardSearch;
-use yii\web\Controller;
+use yii\filters\AccessControl;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\db\Query;
 
 /**
  * FlashCardController implements the CRUD actions for FlashCard model.
  */
-class FlashCardController extends Controller
+class FlashCardController extends base\FlashCardController
+
 {
     /**
      * @inheritdoc
      */
     public function behaviors()
     {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
+        return array_merge(parent::behaviors(), [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    // allow authenticated users
+                    [
+                        'allow' => true,
+                        'roles' => ['@']
+                    ]
                 ],
+                // everything else is denied
             ],
-        ];
-    }
-
-    /**
-     * Lists all FlashCard models.
-     * @return mixed
-     */
-    public function actionIndex()
-    {
-        $searchModel = new FlashCardSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
         ]);
     }
 
-    /**
-     * Displays a single FlashCard model.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionView($id)
+    /*cách 1 dùng hàm excute sql */
+    public function actionViewAllCard()
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        $connection = Yii::$app->getDb();
+        $card = $connection->createCommand('SELECT * FROM flash_card')->queryAll();
+        var_dump($card);
     }
 
-    /**
-     * Creates a new FlashCard model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new FlashCard();
+    /* cách 2 dùng ActiveRecode*/
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
+    public function actionViewAllFlashCard()
+    {
+
+        $id = 2;
+//        $card =FlashCard::find()->asArray()->all();
+        /*string format*/
+        $card = FlashCard::find()->where('id=1')->all();
+//        $card =FlashCard::find()->where("id=$id")->all();
+        // để tránh sql injection yii hỗ trợ cách sau
+        $card = FlashCard::find()->where('id=:id', [':id' => $id])->all();
+//        $card =FlashCard::find()->where('id=2')->all();
+
+        /*operator format*/
+        $card = FlashCard::find()->where(['and', ['id' => 2], ['title' => 'thuật toán sắp xếp']])->all();
+        var_dump($card);
+
+        /**/
+
+        $card = FlashCard::find()->select(['id', 'title'])->where(['id' => $id])->all();
     }
 
-    /**
-     * Updates an existing FlashCard model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionUpdate($id)
+    /*Query Builder*/
+    public function actionViewQueryCard()
     {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
+        $query = new Query();
+        $query->select(['id', 'title'])
+            ->from('flash_card')
+            ->where(['id' => '2'])
+            ->all();
     }
 
-    /**
-     * Deletes an existing FlashCard model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
-    }
-
-    /**
-     * Finds the FlashCard model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return FlashCard the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = FlashCard::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
-        }
-    }
 }
