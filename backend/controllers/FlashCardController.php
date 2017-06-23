@@ -66,15 +66,40 @@ class FlashCardController extends base\FlashCardController
 
         $card = FlashCard::find()->select(['id', 'title'])->where(['id' => $id])->all();
     }
+    public function actionLoadFlashCard(){
+        $id=3;
+//        $card = FlashCard::find()->asArray()->where('id=2')->all();
+//        $card=FlashCard::find()->asArray()->where('id=:id',[':id'=>$id])->one();
+
+//        $card=FlashCard::find()->asArray()->where(['id'=>2,'title'=>'thuật toán sắp xếp'])->all();
+//        $card=FlashCard::find()->asArray()->where(['>','id',3])->all();
+
+        $card =new Query();
+        $card->select(['id', 'title'])
+            ->from('flash_card')
+            ->all();
+
+        var_dump($card);
+    }
+
+
 
     /*Query Builder*/
     public function actionViewQueryCard()
     {
-        $query = new Query();
+        /*$query = new Query();
         $query->select(['id', 'title'])
             ->from('flash_card')
-            ->where(['id' => '2'])
+            ->where(['id' => 2])
             ->all();
+        var_dump($query);*/
+
+        $rows = (new Query())
+            ->select(['id', 'title'])
+            ->from('flash_card')
+            ->where(['title' => 'Sắp xếp nổi bọt'])
+            ->all();
+        var_dump($rows);
     }
 
 
