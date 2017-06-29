@@ -277,7 +277,6 @@ Session, Cookies in Yii2
 ------------------------
 Khi cần truyền dữ liệu nhiều lần qua nhiều lần request ta thường dùng session và cookies.
 Yii2 hỗ trợ các tính năng đó thông qua biến $_SESSION và $_COOKIE
---------------------------
 1) Session:
 Session được lưu trữ trên serverweb.
 Ví dụ về Session:
@@ -366,6 +365,7 @@ Add i18n component in config
     ],  
 ]
 ```
+------------------------------
 Create folder messages and 2 sub-folder for vi-VN - Vietnamese and jp-JP - Japanese language.
 Create file app.php, pk.php and define key-value from source language to target language.
 ------------
