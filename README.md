@@ -344,6 +344,7 @@ class CookiesController extends Controller
 	}
 }
 ```
+* node: khi làm việc vs cookie thì name không đk bao gồm các kí tự đặc biệt sau `=,; \t\r\n\013\014`
 ----------------
 Formatter in Yii2
 -----------------
