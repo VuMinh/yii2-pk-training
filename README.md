@@ -368,7 +368,7 @@ Add i18n component in config
 ------------------------------
 Create folder messages and 2 sub-folder for vi-VN - Vietnamese and jp-JP - Japanese language.
 Create file app.php, pk.php and define key-value from source language to target language.
-------------
+
 2) Data Formatting
 ex:
 ```
