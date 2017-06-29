@@ -66,8 +66,11 @@ class FlashCardController extends Controller
         $model = new FlashCard();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+//            session dùng duy nhất một lần
+            Yii::$app->session->addFlash('success','Thêm mới thành công');
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
+//            Yii::$app->session->addFlash('danger','Thêm không thành công');
             return $this->render('create', [
                 'model' => $model,
             ]);

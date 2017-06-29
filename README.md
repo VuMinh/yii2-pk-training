@@ -179,5 +179,96 @@ echo Yii::$app->request->getserverPort();
 // cổng web : 80
 ```
 ---------------------
-2 Responses trong yii2
+2.Responses trong yii2
 ---------------------
+Responses trong yii2 xử lý các quá trình liên quan đến trả dữ liệu về người dùng
+Các nội dung liên quan:
+1) Trả về dữ liệu HTTP Headers
+```
+$headers = Yii::$app->response->headers;
+// thêm Pragma header. Nếu tồn tại Pragma headers thì sẽ ko viết đè lên
+$headers->add('Pragma', 'no-cache');
+// thêm Pragma header .Mọi Pragma tồn tại sẽ bị discarded 
+$headers->set('Pragma', 'no-cache');
+// xóa bỏ Pragma 
+$values = $headers->remove('Pragma');
+```
+2) Response Body: thường chúng ta sẽ response bằng phương thức `render`, bên cạnh đó có thể dùng cách như sau(cách này ít khi dùng)
+```
+Yii::$app->response->content = 'hello world!';
+```
+3) Chuyển hướng trang web:
+```
+return $this->redirect('http://google.com');
+```
+4) Send File(gửi file cho ng dùng bằng phương thức sendfile),thường kết hợp với ajax trong website
+```
+public function actionDownload()
+{
+    return \Yii::$app->response->sendFile('path/to/file');
+}
+```
+----------
+Yii2 Rest API
+------------
+Có nhiều cách tạo Rest API, trong phần này sẽ sẽ trình bày 3 cách cơ bản tạo Rest API trong Yii2
+1)Dùng qua ActiveController
+ ```
+ class DemoRestController extends ActiveController
+ {
+     public $modelClass = 'common\models\Rest';
+ 
+     public function prepareDataProvider()
+     {
+         $query = \common\models\Rest::find()->all();
+         return new ActiveDataProvider(['query' => $query,]);
+     }
+     public function actionDemo(){
+         return $query = \common\models\Rest::find()->all();
+     }
+ }
+ ```
+---------------
+2)Dùng qua Controller
+```
+class Demov2Controller extends Controller
+{
+    public $enableCsrfValidation = false;
+    public function actionIndex()
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $rest = Rest::find()->all();
+        return $rest;
+    }
+    public function actionCreate()
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $rest = new Rest ();
+        $rest->attributes = \Yii::$app->request->post();
+        if ($rest->validate()) {
+            $rest->save();
+            return array(
+                'status' => 1,
+                'data' => 'Đã thêm thành công'
+            );
+        } else {
+            return array(
+                'status' => 0,
+            );
+        }
+    }
+}
+```
+3)Tạo Restfull API bằng thư viện `"fproject/yii2-restx": "*"`
+Cấu trúc thư mục như sau:
+```
+api
+-config
+-modules
+--v1
+---controllers
+---models
+-runtime
+-.htaccess
+-index.php
+```
