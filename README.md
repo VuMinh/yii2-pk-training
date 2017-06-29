@@ -272,3 +272,117 @@ api
 -.htaccess
 -index.php
 ```
+-----------------------
+Session, Cookies in Yii2
+------------------------
+Khi cần truyền dữ liệu nhiều lần qua nhiều lần request ta thường dùng session và cookies.
+Yii2 hỗ trợ các tính năng đó thông qua biến $_SESSION và $_COOKIE
+--------------------------
+1) Session:
+Session được lưu trữ trên serverweb.
+Ví dụ về Session:
+```
+<?php
+namespace frontend\controllers;
+use yii\base\Controller;
+use Yii;
+class SessiondemoController extends Controller
+{
+	public function actionIndex()
+	{
+		$session = \Yii::$app->session;
+		$session->open();
+		$session->set('name','Minh vt');
+		$session->close();
+		return $this->render('index');
+	}
+	public function actionView()
+	{
+		$session = \Yii::$app->session;
+		$name = $session->get('name');
+		echo $name;
+	}
+}
+```
+File view index.php
+```
+<?php
+use yii\helpers\Html;
+?>
+<p>Demo sessions va cookies</p>
+<?= Html::a('Link demo session',['sessiondemo/view']); ?>
+```
+Muốn sử dụng session trong Yii2 hỗ trợ Component User(còn nếu muốn sử dụng session 1 lần duy nhất ta sử dụng Flash)
+ex:
+```
+Yii::$app->session->addFlash('success','Thêm mới thành công');
+```
+-------------------
+2) Cookies
+Cookies là những thông tin ta gửi đến khách hàng giữ hộ.
+ex:
+```
+<?php
+namespace frontend\controllers;
+use yii\base\Controller;
+use yii\web\Cookie;
+ 
+class CookiesController extends Controller
+{
+	public function actionIndex()
+	{
+		$cookies = \Yii::$app->response->cookies;
+		$cookies->add(new \yii\web\Cookie([
+    'name' => 'Minh vt',
+    
+]));
+		return $this->render('index');
+	}	
+	public function actionView()
+	{
+		$cookies = \Yii::$app->request->cookies;
+		echo $cookies['cookieValidationKey'];
+	}
+}
+```
+----------------
+Formatter in Yii2
+-----------------
+1) i18n
+Add i18n component in config 
+```
+'i18n' => [
+    'translations' => [
+        'app*' => [
+            'class' => 'yii\i18n\PhpMessageSource',
+            'basePath' => '@app/messages',
+            'sourceLanguage' => 'en-US',
+            'fileMap' => [
+                'app' => 'app.php',
+                'app/error' => 'error.php',
+                'app/pk' => 'pk.php'
+            ],
+        ],
+    ],  
+]
+```
+Create folder messages and 2 sub-folder for vi-VN - Vietnamese and jp-JP - Japanese language.
+Create file app.php, pk.php and define key-value from source language to target language.
+------------
+2) Data Formatting
+ex:
+```
+$formatter = \Yii::$app->formatter;
+// output: January 1, 2014
+echo $formatter->asDate('2014-01-01', 'long');
+ 
+// output: 12.50%
+echo $formatter->asPercent(0.125, 2);
+// output: <a href="mailto:cebe@example.com">cebe@example.com</a>
+echo $formatter->asEmail('cebe@example.com'); 
+// output: Yes
+echo $formatter->asBoolean(true); 
+// it also handles display of null values:
+// output: (not set)
+echo $formatter->asDate(null); 
+```
