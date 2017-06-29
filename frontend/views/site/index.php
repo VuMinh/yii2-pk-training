@@ -1,8 +1,45 @@
 <?php
-
+//use Yii;
 /* @var $this yii\web\View */
 
 $this->title = 'My Yii Application';
+
+/*demo request in yii2*/
+
+$request = Yii::$app->request;
+$user_name= $request->get('username','minhvt');
+//var_dump($user_name);
+
+/*if($request->isGet){
+    echo 1;
+}else{
+    echo 0;
+}*/
+/* demo request Urls*/
+
+$gohome =Yii::$app->getHomeUrl();
+
+$link_full =Yii::$app->request->getAbsoluteUrl();
+//var_dump($link_full);
+//print_r($gohome);
+
+$headers = Yii::$app->request->headers;
+$accept = $headers->get('User-Agent');
+
+//var_dump($headers);
+
+/*thông tin ng dùng*/
+
+$userHost = Yii::$app->request->userHost;
+$userIP = Yii::$app->request->userIP;
+//var_dump($userIP);
+//var_dump($userHost);
+
+/* respone in yii2*/
+$respone=Yii::$app->response->content = 'hello world!';
+var_dump($respone);
+
+
 ?>
 <div class="site-index">
 

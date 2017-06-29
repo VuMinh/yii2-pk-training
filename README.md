@@ -130,3 +130,54 @@ class AppAsset extends AssetBundle
 use app\assets\AppAsset;
 AppAsset::register($this);  // $this represents the view object
 ```
+-----------------------
+Request and respone in yii2
+-------------------------
+1) Request in yi2
+-----------------
+Các thông số trong requests: để sử dụng request trong yii2 ta sử dụng một số hàm như sau
+```
+$request = Yii::$app->request;
+
+$get = $request->get();
+// giống code trong php: $get = $_GET;
+
+$user_id = $request->get('user_id');
+// giống code trong php: $user_id = isset($_GET['user_id']) ? $_GET['user_id'] : null;
+
+$user_id = $request->get('user_id', 1);
+// giống code trong php: $user_id = isset($_GET['user_id']) ? $_GET['user_id'] : 1;
+
+$post = $request->post();
+// giống code trong php: $post = $_POST;
+
+$name = $request->post('name');
+// giống code trong php : $name = isset($_POST['name']) ? $_POST['name'] : null;
+
+$name = $request->post('name', '');
+// giống code trong php: $name = isset($_POST['name']) ? $_POST['name'] : '';
+```
+-------------
+Request URLs
+-------------
+```
+echo Yii::$app->request->getUrl();
+// get url không hoàn chỉnh /demoyii2/frontend/web/demo.html
+echo Yii::$app->request->getabsoluteUrl();
+// get url hoàn chỉnh :http://localhost/demoyii2/frontend/web/demo.html
+echo Yii::$app->request->gethostInfo();
+// get thông tin host :http://localhost
+echo Yii::$app->request->getpathInfo();
+//get path info :demo.html
+echo Yii::$app->request->getqueryString();
+// get đoạn mã query :/demoyii2/frontend/web
+echo Yii::$app->request->getbaseUrl();
+// lấy thông tin domain : localhost
+echo Yii::$app->request->getserverName();
+// rõng vì server ko có 
+echo Yii::$app->request->getserverPort();
+// cổng web : 80
+```
+---------------------
+2 Responses trong yii2
+---------------------

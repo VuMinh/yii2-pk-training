@@ -1,6 +1,8 @@
 <?php
+
 namespace frontend\controllers;
 
+use frontend\models\FlashCard;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
@@ -139,6 +141,21 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
+//        return $this->redirect('http://google.com', 301);
+    }
+
+    /* send file in yii2*/
+
+    public function actionDownload()
+    {
+        /*$file = Yii::getAlias('@web') . '/file/timeline.docx';
+        return \Yii::$app->response->sendFile('path/to/file');*/
+    }
+
+    public function actionField()
+    {
+        $model = new FlashCard();
+        return $this->render('file', ['model' => $model]);
     }
 
     /**

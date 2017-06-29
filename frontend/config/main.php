@@ -42,10 +42,12 @@ return [
             'showScriptName' => false,
 //            'suffix' => '.html',
             'rules' => [
-                /*'gioi-thieu'=>'site/about',
-                'article/<id:\d+>' => 'article/view',*/
+//               'gioi-thieu'=>'site/about',
+                 /*'article/<id:\d+>' => 'article/view',*/
                 '<controller>/<action:(view)>/<id:\d+>' => '<controller>/<action>',
                 '<controller>s' => '<controller>/index',
+               /*  'trang-chu'=>'site/index',
+                'dang-nhap'=>'site/login'*/
             ],
         ],
 
